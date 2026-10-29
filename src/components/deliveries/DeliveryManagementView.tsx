@@ -22,10 +22,12 @@ import {
 
 interface DeliveryManagementViewProps {
   onPlotRouteOnMap?: (delivery: Delivery) => void;
+  onOpenDecisionLab?: (deliveryId: string) => void;
 }
 
 export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
   onPlotRouteOnMap,
+  onOpenDecisionLab,
 }) => {
   const {
     deliveries,
@@ -313,11 +315,20 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                       {/* State transitions */}
                       {delivery.status === 'pending' && (
                         <>
+                          {onOpenDecisionLab && (
+                            <button
+                              onClick={() => onOpenDecisionLab(delivery.id)}
+                              className="px-2 py-1 rounded bg-[#A65BFF]/20 hover:bg-[#A65BFF]/30 text-[#A65BFF] border border-[#A65BFF]/40 text-xs font-bold font-mono"
+                              title="Inspect full candidate matrix in Decision Lab"
+                            >
+                              Decision Lab
+                            </button>
+                          )}
                           <button
                             onClick={() => setDispatchTargetDelivery(delivery)}
                             className="px-2.5 py-1 rounded bg-[#FFF21A] hover:bg-[#fff447] text-[#171717] font-bold text-xs uppercase"
                           >
-                            Smart Assign
+                            Quick Assign
                           </button>
                           <button
                             onClick={() => cancelDelivery(delivery.id, 'Cancelled from queue')}
@@ -505,3 +516,4 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
     </div>
   );
 };
+

@@ -114,6 +114,13 @@ export const OperationsOverview: React.FC<OperationsOverviewProps> = ({ onNaviga
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => onNavigateToTab('decision-lab')}
+            className="px-3.5 py-2 rounded bg-[#A65BFF] hover:bg-[#A65BFF]/90 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg shadow-[#A65BFF]/20"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Decision Lab</span>
+          </button>
+          <button
             onClick={resetDemoData}
             className="px-3 py-2 rounded bg-[#202020] hover:bg-[#282828] border border-[#383838] text-xs font-mono text-[#A3A3A3] hover:text-[#FFFFFF] flex items-center gap-1.5 transition-colors"
             title="Reset to canonical demonstration state"
@@ -341,3 +348,4 @@ export const OperationsOverview: React.FC<OperationsOverviewProps> = ({ onNaviga
     </div>
   );
 };
+

@@ -204,17 +204,7 @@ export class AssignmentEngine {
         status: 'delivered',
       });
 
-      // Release Vehicle
-      if (vehicleId) {
-        this.store.updateVehicle(vehicleId, { status: 'available' });
-      }
-
-      // Release Driver
-      if (driverId) {
-        this.store.updateDriver(driverId, { availability_status: 'available' });
-      }
-
-      // Close active assignment
+      // Close active assignment FIRST
       const activeAssignment = this.store
         .getAssignments()
         .find((a) => a.delivery_id === deliveryId && a.status === 'active');
@@ -224,6 +214,30 @@ export class AssignmentEngine {
           status: 'completed',
           completed_at: new Date().toISOString(),
         });
+      }
+
+      // Safe Vehicle Release: Only release if currently 'assigned' AND no other active assignment exists
+      if (vehicleId) {
+        const vehicle = this.store.findVehicle(vehicleId);
+        const otherActiveVehicleAssignments = this.store
+          .getAssignments()
+          .filter((a) => a.vehicle_id === vehicleId && a.status === 'active' && a.delivery_id !== deliveryId);
+
+        if (vehicle && vehicle.status === 'assigned' && otherActiveVehicleAssignments.length === 0) {
+          this.store.updateVehicle(vehicleId, { status: 'available' });
+        }
+      }
+
+      // Safe Driver Release: Only release if currently 'assigned' AND no other active assignment exists
+      if (driverId) {
+        const driver = this.store.findDriver(driverId);
+        const otherActiveDriverAssignments = this.store
+          .getAssignments()
+          .filter((a) => a.driver_id === driverId && a.status === 'active' && a.delivery_id !== deliveryId);
+
+        if (driver && driver.availability_status === 'assigned' && otherActiveDriverAssignments.length === 0) {
+          this.store.updateDriver(driverId, { availability_status: 'available' });
+        }
       }
 
       this.store.addAuditLog(
@@ -286,17 +300,7 @@ export class AssignmentEngine {
         status: 'cancelled',
       });
 
-      // Safely release vehicle if assigned
-      if (vehicleId) {
-        this.store.updateVehicle(vehicleId, { status: 'available' });
-      }
-
-      // Safely release driver if assigned
-      if (driverId) {
-        this.store.updateDriver(driverId, { availability_status: 'available' });
-      }
-
-      // Cancel active assignment if exists
+      // Cancel active assignment if exists FIRST
       const activeAssignment = this.store
         .getAssignments()
         .find((a) => a.delivery_id === deliveryId && a.status === 'active');
@@ -306,6 +310,30 @@ export class AssignmentEngine {
           status: 'cancelled',
           completed_at: new Date().toISOString(),
         });
+      }
+
+      // Safe Vehicle Release: Only release if currently 'assigned' AND no other active assignment exists
+      if (vehicleId) {
+        const vehicle = this.store.findVehicle(vehicleId);
+        const otherActiveVehicleAssignments = this.store
+          .getAssignments()
+          .filter((a) => a.vehicle_id === vehicleId && a.status === 'active' && a.delivery_id !== deliveryId);
+
+        if (vehicle && vehicle.status === 'assigned' && otherActiveVehicleAssignments.length === 0) {
+          this.store.updateVehicle(vehicleId, { status: 'available' });
+        }
+      }
+
+      // Safe Driver Release: Only release if currently 'assigned' AND no other active assignment exists
+      if (driverId) {
+        const driver = this.store.findDriver(driverId);
+        const otherActiveDriverAssignments = this.store
+          .getAssignments()
+          .filter((a) => a.driver_id === driverId && a.status === 'active' && a.delivery_id !== deliveryId);
+
+        if (driver && driver.availability_status === 'assigned' && otherActiveDriverAssignments.length === 0) {
+          this.store.updateDriver(driverId, { availability_status: 'available' });
+        }
       }
 
       this.store.addAuditLog(
@@ -374,3 +402,4 @@ export class AssignmentEngine {
 }
 
 export const globalAssignmentEngine = new AssignmentEngine();
+

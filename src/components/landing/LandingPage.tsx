@@ -212,15 +212,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </p>
           </div>
 
-          <div className="p-8 rounded-xl bg-[#202020] border border-[#383838] space-y-4 hover:border-[#A65BFF] transition-colors">
-            <div className="p-3 rounded-lg bg-[#A65BFF]/10 text-[#A65BFF] w-fit">
+          <div className="p-8 rounded-xl bg-[#202020] border-2 border-[#A65BFF] space-y-4 shadow-xl shadow-[#A65BFF]/10">
+            <div className="p-3 rounded-lg bg-[#A65BFF]/20 text-[#A65BFF] w-fit">
               <Sparkles className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold font-display text-[#FFFFFF]">
-              Explainable Recommendations
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xl font-bold font-display text-[#FFFFFF]">
+                ROUTIQ Decision Lab
+              </h3>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#A65BFF]/20 text-[#A65BFF] font-bold">
+                SIGNATURE
+              </span>
+            </div>
             <p className="text-xs text-[#A3A3A3] leading-relaxed font-mono">
-              Dynamic multi-factor scoring matches payload capacities, vehicle categories, and priority ratings with transparent, audit-ready rationale.
+              Explain every dispatch decision with a deterministic eligibility matrix, non-mutating What-If comparative simulation, and active Conflict Radar.
             </p>
           </div>
 
@@ -328,3 +333,4 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
     </div>
   );
 };
+

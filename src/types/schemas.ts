@@ -37,3 +37,4 @@ export const assignmentRequestSchema = z.object({
   vehicle_id: z.string().min(1, 'Vehicle ID is required'),
   driver_id: z.string().min(1, 'Driver ID is required'),
 });
+

@@ -63,3 +63,4 @@ export function vehicleTypeLabel(type: string): string {
   };
   return map[type] || type;
 }
+

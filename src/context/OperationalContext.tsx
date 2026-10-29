@@ -250,3 +250,4 @@ export const useOperational = () => {
   if (!context) throw new Error('useOperational must be used within an OperationalProvider');
   return context;
 };
+

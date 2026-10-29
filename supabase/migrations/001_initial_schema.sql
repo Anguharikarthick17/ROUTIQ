@@ -86,3 +86,4 @@ CREATE INDEX IF NOT EXISTS idx_drivers_status ON public.drivers(availability_sta
 CREATE INDEX IF NOT EXISTS idx_deliveries_status ON public.deliveries(status);
 CREATE INDEX IF NOT EXISTS idx_deliveries_priority ON public.deliveries(priority);
 CREATE INDEX IF NOT EXISTS idx_assignments_active ON public.assignments(status) WHERE status = 'active';
+

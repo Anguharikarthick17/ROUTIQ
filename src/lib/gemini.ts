@@ -159,3 +159,4 @@ User Query: "${query}"`,
     sources: ['Operational Telemetry Index'],
   };
 }
+

@@ -183,7 +183,7 @@ export const SmartDispatchModal: React.FC<SmartDispatchModalProps> = ({
 
               {/* Explainability bullets */}
               <div className="mt-2 space-y-1">
-                {recommendation.bestRecommendation.reasons.map((reason, idx) => (
+                {recommendation.bestRecommendation.reasons.map((reason: string, idx: number) => (
                   <div key={idx} className="flex items-center gap-2 text-xs text-[#A3A3A3]">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span>{reason}</span>
@@ -297,3 +297,4 @@ export const SmartDispatchModal: React.FC<SmartDispatchModalProps> = ({
     </div>
   );
 };
+

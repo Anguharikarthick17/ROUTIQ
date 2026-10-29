@@ -236,3 +236,4 @@ export const RoutiqCopilot: React.FC = () => {
     </div>
   );
 };
+

@@ -435,3 +435,4 @@ export const VehicleManagementView: React.FC = () => {
     </div>
   );
 };
+

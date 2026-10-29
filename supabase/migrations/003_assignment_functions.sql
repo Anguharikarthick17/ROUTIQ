@@ -232,27 +232,37 @@ BEGIN
         updated_at = timezone('utc'::text, now())
     WHERE id = p_delivery_id;
 
-    -- Release vehicle
-    IF v_vehicle_id IS NOT NULL THEN
-        UPDATE public.vehicles
-        SET status = 'available',
-            updated_at = timezone('utc'::text, now())
-        WHERE id = v_vehicle_id;
-    END IF;
-
-    -- Release driver
-    IF v_driver_id IS NOT NULL THEN
-        UPDATE public.drivers
-        SET availability_status = 'available',
-            updated_at = timezone('utc'::text, now())
-        WHERE id = v_driver_id;
-    END IF;
-
-    -- Update active assignment
+    -- Update active assignment FIRST
     UPDATE public.assignments
     SET status = 'completed',
         completed_at = timezone('utc'::text, now())
     WHERE delivery_id = p_delivery_id AND status = 'active';
+
+    -- Safely release vehicle ONLY if still currently 'assigned' AND no other active assignment exists
+    IF v_vehicle_id IS NOT NULL THEN
+        UPDATE public.vehicles v
+        SET status = 'available',
+            updated_at = timezone('utc'::text, now())
+        WHERE v.id = v_vehicle_id
+          AND v.status = 'assigned'
+          AND NOT EXISTS (
+              SELECT 1 FROM public.assignments a
+              WHERE a.vehicle_id = v_vehicle_id AND a.status = 'active'
+          );
+    END IF;
+
+    -- Safely release driver ONLY if currently 'assigned' AND no other active assignment exists
+    IF v_driver_id IS NOT NULL THEN
+        UPDATE public.drivers d
+        SET availability_status = 'available',
+            updated_at = timezone('utc'::text, now())
+        WHERE d.id = v_driver_id
+          AND d.availability_status = 'assigned'
+          AND NOT EXISTS (
+              SELECT 1 FROM public.assignments a
+              WHERE a.driver_id = v_driver_id AND a.status = 'active'
+          );
+    END IF;
 
     -- Audit log
     INSERT INTO public.audit_logs (
@@ -323,27 +333,37 @@ BEGIN
         updated_at = timezone('utc'::text, now())
     WHERE id = p_delivery_id;
 
-    -- Safely release vehicle if assigned
-    IF v_vehicle_id IS NOT NULL THEN
-        UPDATE public.vehicles
-        SET status = 'available',
-            updated_at = timezone('utc'::text, now())
-        WHERE id = v_vehicle_id;
-    END IF;
-
-    -- Safely release driver if assigned
-    IF v_driver_id IS NOT NULL THEN
-        UPDATE public.drivers
-        SET availability_status = 'available',
-            updated_at = timezone('utc'::text, now())
-        WHERE id = v_driver_id;
-    END IF;
-
-    -- Mark assignment cancelled
+    -- Mark assignment cancelled FIRST
     UPDATE public.assignments
     SET status = 'cancelled',
         completed_at = timezone('utc'::text, now())
     WHERE delivery_id = p_delivery_id AND status = 'active';
+
+    -- Safely release vehicle ONLY if still currently 'assigned' AND no other active assignment exists
+    IF v_vehicle_id IS NOT NULL THEN
+        UPDATE public.vehicles v
+        SET status = 'available',
+            updated_at = timezone('utc'::text, now())
+        WHERE v.id = v_vehicle_id
+          AND v.status = 'assigned'
+          AND NOT EXISTS (
+              SELECT 1 FROM public.assignments a
+              WHERE a.vehicle_id = v_vehicle_id AND a.status = 'active'
+          );
+    END IF;
+
+    -- Safely release driver ONLY if currently 'assigned' AND no other active assignment exists
+    IF v_driver_id IS NOT NULL THEN
+        UPDATE public.drivers d
+        SET availability_status = 'available',
+            updated_at = timezone('utc'::text, now())
+        WHERE d.id = v_driver_id
+          AND d.availability_status = 'assigned'
+          AND NOT EXISTS (
+              SELECT 1 FROM public.assignments a
+              WHERE a.driver_id = v_driver_id AND a.status = 'active'
+          );
+    END IF;
 
     -- Audit log
     INSERT INTO public.audit_logs (
@@ -415,3 +435,4 @@ BEGIN
     END IF;
 END;
 $$;
+

@@ -108,9 +108,95 @@ export interface AssignmentResult {
 export interface RecommendationScore {
   vehicle: Vehicle;
   driver: Driver;
-  score: number; // 0 to 100
+  score: number;
   reasons: string[];
   capacityFitPct: number;
   isEligible: boolean;
   ineligibilityReason?: string;
 }
+
+export interface ScoreBreakdown {
+  base: number;
+  capacity_fit: number;
+  type_match: number;
+  priority_boost: number;
+  green_bonus: number;
+  route_distance_score?: number;
+  route_eta_score?: number;
+  total: number;
+}
+
+export interface RouteTelemetry {
+  distanceKm: number;
+  durationMinutes: number;
+  source: 'OSRM' | 'Simulated Network Geometry' | 'Unavailable';
+  isEstimate: boolean;
+  status: 'loaded' | 'loading' | 'failed' | 'not_requested';
+}
+
+export interface CombinationEvaluation {
+  delivery_id: string;
+  vehicle_id: string;
+  driver_id: string;
+  vehicle: Vehicle;
+  driver: Driver;
+  is_eligible: boolean;
+  evaluation_timestamp: string;
+  blocking_reasons: string[];
+  satisfied_criteria: string[];
+  non_blocking_warnings: string[];
+  state_freshness: {
+    is_stale: boolean;
+    evaluated_at: string;
+  };
+  score_breakdown: ScoreBreakdown;
+  route_telemetry?: RouteTelemetry;
+  conflicting_delivery_id?: string; // ID of active delivery occupying vehicle or driver
+  capacityFitPct: number;
+}
+
+export interface DecisionLabWorkspaceState {
+  selectedDeliveryId: string | null;
+  evaluations: CombinationEvaluation[];
+  topRecommendation: CombinationEvaluation | null;
+  whyChosenExplanation: string[];
+  whyNotOthersExplanations: { vehicle_id: string; driver_id: string; reason: string }[];
+  evaluatedAt: string;
+  isStale: boolean;
+  isLoading: boolean;
+}
+
+export interface ConflictItem {
+  id: string;
+  type: 'OCCUPIED_VEHICLE' | 'OCCUPIED_DRIVER' | 'MAINTENANCE_VEHICLE' | 'INACTIVE_VEHICLE' | 'UNAVAILABLE_DRIVER' | 'BLOCKED_DELIVERY' | 'CAPACITY_MISMATCH';
+  title: string;
+  resourceId: string;
+  resourceLabel: string;
+  description: string;
+  activeDeliveryId?: string;
+  severity: 'high' | 'medium' | 'info';
+  actionableStep: string;
+}
+
+export interface ConflictRadarData {
+  totalConflicts: number;
+  occupiedVehicles: { vehicle: Vehicle; activeDeliveryId: string }[];
+  occupiedDrivers: { driver: Driver; activeDeliveryId: string }[];
+  maintenanceVehicles: Vehicle[];
+  inactiveVehicles: Vehicle[];
+  unavailableDrivers: Driver[];
+  blockedDeliveries: { delivery: Delivery; rootCause: string }[];
+  conflictItems: ConflictItem[];
+  generatedAt: string;
+}
+
+export interface WhatIfSimulationResult {
+  isNonMutating: boolean;
+  initialHash: string;
+  finalHash: string;
+  evaluations: CombinationEvaluation[];
+  comparisonCandidates: CombinationEvaluation[];
+  selectedPair: CombinationEvaluation | null;
+}
+
+

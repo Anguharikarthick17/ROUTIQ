@@ -9,6 +9,8 @@ import { DeliveryManagementView } from './components/deliveries/DeliveryManageme
 import { RoutiqCopilot } from './components/copilot/RoutiqCopilot';
 import { AnalyticsView } from './components/analytics/AnalyticsView';
 import { AuditHistoryView } from './components/audit/AuditHistoryView';
+import { DecisionLabView } from './components/decision-lab/DecisionLabView';
+import { isSupabaseConfigured } from './lib/supabase';
 import { Delivery } from './types';
 import {
   LayoutDashboard,
@@ -24,6 +26,8 @@ import {
   Menu,
   X,
   UserCheck,
+  Sliders,
+  Database,
 } from 'lucide-react';
 
 const AppContent: React.FC = () => {
@@ -33,6 +37,7 @@ const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [showLanding, setShowLanding] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [decisionLabDeliveryId, setDecisionLabDeliveryId] = useState<string | undefined>(undefined);
 
   // If user is on landing page
   if (showLanding) {
@@ -41,6 +46,7 @@ const AppContent: React.FC = () => {
 
   const navItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard },
+    { id: 'decision-lab', label: 'Decision Lab', icon: Sliders, isSignature: true },
     { id: 'deliveries', label: 'Deliveries', icon: Package },
     { id: 'vehicles', label: 'Fleet Assets', icon: Truck },
     { id: 'drivers', label: 'Drivers', icon: Users },
@@ -94,9 +100,13 @@ const AppContent: React.FC = () => {
                   onClick={() => setActiveTab(item.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
                     isActive
-                      ? item.isAi
+                      ? item.isSignature
+                        ? 'bg-[#FFF21A] text-[#171717] shadow-lg shadow-[#FFF21A]/30 font-bold border-b-2 border-[#171717]'
+                        : item.isAi
                         ? 'bg-[#A65BFF] text-white shadow-lg shadow-[#A65BFF]/20 font-bold'
                         : 'bg-[#FFF21A] text-[#171717] shadow-lg shadow-[#FFF21A]/20 font-bold'
+                      : item.isSignature
+                      ? 'text-[#FFF21A] hover:bg-[#202020] hover:text-[#fff447] border border-[#FFF21A]/30 font-semibold'
                       : item.isAi
                       ? 'text-[#A65BFF] hover:bg-[#202020] hover:text-white'
                       : 'text-[#A3A3A3] hover:text-[#FFFFFF] hover:bg-[#202020]'
@@ -111,6 +121,24 @@ const AppContent: React.FC = () => {
 
           {/* User Profile & Role Switcher */}
           <div className="flex items-center gap-3">
+            {/* Persistence Indicator */}
+            <div
+              className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-mono ${
+                isSupabaseConfigured()
+                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800'
+                  : 'bg-[#202020] text-[#A3A3A3] border-[#383838]'
+              }`}
+              title={
+                isSupabaseConfigured()
+                  ? 'Supabase PostgreSQL Cloud Active with Row-Level Security'
+                  : 'Local Transactional Store Active (localStorage fallback mode). Supabase credentials not set.'
+              }
+            >
+              <Database className="w-3 h-3 text-[#FFF21A]" />
+              <span>
+                {isSupabaseConfigured() ? 'Supabase PG Cloud' : 'Local Fallback'}
+              </span>
+            </div>
             <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#202020] border border-[#383838] text-xs font-mono">
               <UserCheck className="w-3.5 h-3.5 text-[#A65BFF]" />
               <span className="text-[#A3A3A3]">Role:</span>
@@ -156,9 +184,13 @@ const AppContent: React.FC = () => {
                   }}
                   className={`w-full text-left px-3 py-2 rounded-lg text-xs font-mono flex items-center gap-2 ${
                     isActive
-                      ? item.isAi
+                      ? item.isSignature
+                        ? 'bg-[#FFF21A] text-[#171717] font-bold'
+                        : item.isAi
                         ? 'bg-[#A65BFF] text-white font-bold'
                         : 'bg-[#FFF21A] text-[#171717] font-bold'
+                      : item.isSignature
+                      ? 'text-[#FFF21A] font-semibold'
                       : 'text-[#A3A3A3]'
                   }`}
                 >
@@ -187,7 +219,17 @@ const AppContent: React.FC = () => {
         {activeTab === 'overview' && (
           <OperationsOverview onNavigateToTab={(tab) => setActiveTab(tab)} />
         )}
-        {activeTab === 'deliveries' && <DeliveryManagementView />}
+        {activeTab === 'decision-lab' && (
+          <DecisionLabView initialDeliveryId={decisionLabDeliveryId} />
+        )}
+        {activeTab === 'deliveries' && (
+          <DeliveryManagementView
+            onOpenDecisionLab={(id) => {
+              setDecisionLabDeliveryId(id);
+              setActiveTab('decision-lab');
+            }}
+          />
+        )}
         {activeTab === 'vehicles' && <VehicleManagementView />}
         {activeTab === 'drivers' && <DriverManagementView />}
         {activeTab === 'copilot' && <RoutiqCopilot />}
@@ -209,3 +251,4 @@ export function App() {
 }
 
 export default App;
+

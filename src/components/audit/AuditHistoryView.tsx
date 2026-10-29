@@ -130,3 +130,4 @@ export const AuditHistoryView: React.FC = () => {
     </div>
   );
 };
+

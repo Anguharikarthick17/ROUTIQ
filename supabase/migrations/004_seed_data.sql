@@ -77,3 +77,4 @@ VALUES
 ('SEED_INITIALIZE', 'SYSTEM', 'GLOBAL', 'system', '{"message": "Demo logistics state initialized"}', NOW() - INTERVAL '6 hours'),
 ('ASSIGN_DELIVERY', 'DELIVERY', 'DEL-202', 'dispatcher', '{"vehicle_id": "V-103", "driver_id": "DR-03"}', NOW() - INTERVAL '1 hour'),
 ('COMPLETE_DELIVERY', 'DELIVERY', 'DEL-205', 'dispatcher', '{"released_vehicle_id": "V-102", "released_driver_id": "DR-01"}', NOW() - INTERVAL '3 hours');
+
