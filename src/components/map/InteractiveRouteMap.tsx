@@ -1,0 +1,216 @@
+import React, { useEffect, useRef, useState } from 'react';
+import L from 'leaflet';
+import { Delivery } from '../../types';
+import { fetchRoadRoute, RouteResponse } from '../../lib/osrm';
+import { Navigation, Clock, ShieldCheck, AlertCircle } from 'lucide-react';
+
+interface InteractiveRouteMapProps {
+  selectedDelivery: Delivery | null;
+  allDeliveries?: Delivery[];
+  onSelectDelivery?: (delivery: Delivery) => void;
+}
+
+export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
+  selectedDelivery,
+  allDeliveries = [],
+  onSelectDelivery,
+}) => {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const routeLayerRef = useRef<L.Polyline | null>(null);
+  const markersLayerRef = useRef<L.LayerGroup | null>(null);
+
+  const [routeData, setRouteData] = useState<RouteResponse | null>(null);
+  const [isLoadingRoute, setIsLoadingRoute] = useState<boolean>(false);
+
+  // Initialize Map
+  useEffect(() => {
+    if (!mapContainerRef.current || mapInstanceRef.current) return;
+
+    const initialCenter: [number, number] = [37.7749, -122.4194]; // San Francisco base coordinates
+    const map = L.map(mapContainerRef.current, {
+      center: initialCenter,
+      zoom: 13,
+      zoomControl: false,
+    });
+
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // CartoDB Dark Matter tiles matching Charcoal Black #171717 aesthetic
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    }).addTo(map);
+
+    markersLayerRef.current = L.layerGroup().addTo(map);
+    mapInstanceRef.current = map;
+
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+    };
+  }, []);
+
+  // Update Markers and Route when selectedDelivery changes
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    const markersLayer = markersLayerRef.current;
+    if (!map || !markersLayer) return;
+
+    markersLayer.clearLayers();
+    if (routeLayerRef.current) {
+      map.removeLayer(routeLayerRef.current);
+      routeLayerRef.current = null;
+    }
+    setRouteData(null);
+
+    // Create custom pin icons using ROUTIQ brand colors
+    const createCustomIcon = (label: string, bg: string, text: string) => {
+      return L.divIcon({
+        className: 'custom-map-marker',
+        html: `
+          <div style="background-color: ${bg}; color: ${text}; padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; font-family: monospace; border: 1px solid #383838; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+            <span>${label}</span>
+          </div>
+        `,
+        iconSize: [80, 30],
+        iconAnchor: [40, 15],
+      });
+    };
+
+    if (selectedDelivery) {
+      const pLat = selectedDelivery.pickup_lat || 37.7749;
+      const pLng = selectedDelivery.pickup_lng || -122.4194;
+      const dLat = selectedDelivery.dropoff_lat || 37.7892;
+      const dLng = selectedDelivery.dropoff_lng || -122.4014;
+
+      const pMarker = L.marker([pLat, pLng], {
+        icon: createCustomIcon('PICKUP', '#FFF21A', '#171717'),
+      }).bindPopup(`<b>Pickup:</b> ${selectedDelivery.pickup_location}`);
+
+      const dMarker = L.marker([dLat, dLng], {
+        icon: createCustomIcon('DROPOFF', '#A65BFF', '#FFFFFF'),
+      }).bindPopup(`<b>Dropoff:</b> ${selectedDelivery.dropoff_location}`);
+
+      markersLayer.addLayer(pMarker);
+      markersLayer.addLayer(dMarker);
+
+      // Fetch Real Road Route
+      setIsLoadingRoute(true);
+      fetchRoadRoute(pLat, pLng, dLat, dLng).then((route) => {
+        setIsLoadingRoute(false);
+        setRouteData(route);
+
+        if (mapInstanceRef.current) {
+          const polyline = L.polyline(route.coordinates, {
+            color: '#FFF21A',
+            weight: 4,
+            opacity: 0.9,
+            dashArray: route.isEstimate ? '6, 8' : undefined,
+          }).addTo(mapInstanceRef.current);
+
+          routeLayerRef.current = polyline;
+          mapInstanceRef.current.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+        }
+      });
+    } else {
+      // Show general cluster of all deliveries
+      const validDeliveries = allDeliveries.filter((d) => d.pickup_lat && d.pickup_lng);
+      if (validDeliveries.length > 0) {
+        const bounds: [number, number][] = [];
+        validDeliveries.forEach((del) => {
+          if (del.pickup_lat && del.pickup_lng) {
+            bounds.push([del.pickup_lat, del.pickup_lng]);
+            const marker = L.marker([del.pickup_lat, del.pickup_lng], {
+              icon: createCustomIcon(del.id, '#202020', '#FFFFFF'),
+            });
+            marker.on('click', () => {
+              if (onSelectDelivery) onSelectDelivery(del);
+            });
+            markersLayer.addLayer(marker);
+          }
+        });
+        if (bounds.length > 0) {
+          map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+        }
+      }
+    }
+  }, [selectedDelivery, allDeliveries, onSelectDelivery]);
+
+  return (
+    <div className="relative w-full h-[450px] bg-[#171717] rounded-xl overflow-hidden border border-[#383838]">
+      {/* Map Canvas */}
+      <div ref={mapContainerRef} className="w-full h-full z-0" />
+
+      {/* Route Telemetry Overlay Panel */}
+      {selectedDelivery && (
+        <div className="absolute top-4 left-4 z-10 bg-[#171717]/90 backdrop-blur-md border border-[#383838] p-4 rounded-lg max-w-sm shadow-2xl">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <span className="text-[10px] uppercase font-mono tracking-wider text-[#A3A3A3]">
+              Route Telemetry
+            </span>
+            <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#FFF21A] text-[#171717] font-bold">
+              {selectedDelivery.id}
+            </span>
+          </div>
+
+          <div className="space-y-1.5 text-xs text-[#FFFFFF]">
+            <div className="flex items-start gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#FFF21A] mt-1 shrink-0" />
+              <span className="truncate">{selectedDelivery.pickup_location}</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#A65BFF] mt-1 shrink-0" />
+              <span className="truncate">{selectedDelivery.dropoff_location}</span>
+            </div>
+          </div>
+
+          {isLoadingRoute ? (
+            <div className="mt-3 flex items-center gap-2 text-xs text-[#A3A3A3] font-mono animate-pulse">
+              <Navigation className="w-3.5 h-3.5 animate-spin" />
+              Calculating road navigation path...
+            </div>
+          ) : routeData ? (
+            <div className="mt-3 pt-3 border-t border-[#383838] grid grid-cols-2 gap-3">
+              <div>
+                <span className="text-[10px] text-[#A3A3A3] block font-mono">ROAD DISTANCE</span>
+                <span className="text-sm font-bold font-mono text-[#FFFFFF]">
+                  {routeData.distanceKm} km
+                </span>
+              </div>
+              <div>
+                <span className="text-[10px] text-[#A3A3A3] block font-mono">ESTIMATED TIME</span>
+                <div className="flex items-center gap-1 text-sm font-bold font-mono text-[#FFF21A]">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{routeData.durationMinutes} min</span>
+                </div>
+              </div>
+              <div className="col-span-2 flex items-center justify-between text-[10px] font-mono text-[#A3A3A3] bg-[#202020] px-2 py-1 rounded">
+                <span className="flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-[#A65BFF]" />
+                  Source: {routeData.source}
+                </span>
+                <span>{routeData.isEstimate ? 'Simulated Street Grid' : 'Real Road Network'}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-3 flex items-center gap-2 text-xs text-yellow-500 font-mono">
+              <AlertCircle className="w-3.5 h-3.5" />
+              Route calculation unavailable
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Standby Help Pill when no delivery selected */}
+      {!selectedDelivery && (
+        <div className="absolute bottom-4 left-4 z-10 bg-[#171717]/85 backdrop-blur-md border border-[#383838] px-3 py-1.5 rounded-full text-xs font-mono text-[#A3A3A3] flex items-center gap-2">
+          <Navigation className="w-3.5 h-3.5 text-[#FFF21A]" />
+          Select any delivery to plot street-level turn-by-turn route
+        </div>
+      )}
+    </div>
+  );
+};
