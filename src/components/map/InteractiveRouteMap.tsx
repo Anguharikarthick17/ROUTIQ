@@ -67,16 +67,16 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
     setRouteData(null);
 
     // Create custom pin icons using ROUTIQ brand colors
-    const createCustomIcon = (label: string, bg: string, text: string) => {
+    const createCustomIcon = (label: string, bg: string, text: string, borderColor = '#111111') => {
       return L.divIcon({
         className: 'custom-map-marker',
         html: `
-          <div style="background-color: ${bg}; color: ${text}; padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; font-family: monospace; border: 1px solid #383838; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+          <div style="background-color: ${bg}; color: ${text}; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 11px; font-family: monospace; border: 2px solid ${borderColor}; box-shadow: 2px 2px 0px #111111; display: flex; align-items: center; gap: 4px; white-space: nowrap;">
             <span>${label}</span>
           </div>
         `,
-        iconSize: [80, 30],
-        iconAnchor: [40, 15],
+        iconSize: [90, 32],
+        iconAnchor: [45, 16],
       });
     };
 
@@ -87,11 +87,11 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
       const dLng = selectedDelivery.dropoff_lng || -122.4014;
 
       const pMarker = L.marker([pLat, pLng], {
-        icon: createCustomIcon('PICKUP', '#FFF21A', '#171717'),
+        icon: createCustomIcon('PICKUP', '#FFF21A', '#111111', '#111111'),
       }).bindPopup(`<b>Pickup:</b> ${selectedDelivery.pickup_location}`);
 
       const dMarker = L.marker([dLat, dLng], {
-        icon: createCustomIcon('DROPOFF', '#A65BFF', '#FFFFFF'),
+        icon: createCustomIcon('DROPOFF', '#A65BFF', '#FFFFFF', '#111111'),
       }).bindPopup(`<b>Dropoff:</b> ${selectedDelivery.dropoff_location}`);
 
       markersLayer.addLayer(pMarker);
@@ -105,10 +105,10 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
 
         if (mapInstanceRef.current) {
           const polyline = L.polyline(route.coordinates, {
-            color: '#FFF21A',
-            weight: 4,
-            opacity: 0.9,
-            dashArray: route.isEstimate ? '6, 8' : undefined,
+            color: '#A65BFF',
+            weight: 5,
+            opacity: 0.95,
+            dashArray: route.isEstimate ? '8, 8' : undefined,
           }).addTo(mapInstanceRef.current);
 
           routeLayerRef.current = polyline;
@@ -124,7 +124,7 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
           if (del.pickup_lat && del.pickup_lng) {
             bounds.push([del.pickup_lat, del.pickup_lng]);
             const marker = L.marker([del.pickup_lat, del.pickup_lng], {
-              icon: createCustomIcon(del.id, '#202020', '#FFFFFF'),
+              icon: createCustomIcon(del.id, '#FFFFFF', '#111111', '#111111'),
             });
             marker.on('click', () => {
               if (onSelectDelivery) onSelectDelivery(del);
@@ -140,63 +140,65 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
   }, [selectedDelivery, allDeliveries, onSelectDelivery]);
 
   return (
-    <div className="relative w-full h-[450px] bg-[#171717] rounded-xl overflow-hidden border border-[#383838]">
+    <div className="relative w-full h-[480px] bg-[#111111] rounded-xl overflow-hidden border-2 border-[#111111] shadow-[4px_4px_0px_#111111]">
       {/* Map Canvas */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
       {/* Route Telemetry Overlay Panel */}
       {selectedDelivery && (
-        <div className="absolute top-4 left-4 z-10 bg-[#171717]/90 backdrop-blur-md border border-[#383838] p-4 rounded-lg max-w-sm shadow-2xl">
-          <div className="flex items-center justify-between gap-3 mb-2">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-[#A3A3A3]">
+        <div className="absolute top-4 left-4 z-10 bg-[#FFFFFF] text-[#111111] border-2 border-[#111111] p-4 rounded-xl max-w-sm shadow-[4px_4px_0px_#111111]">
+          <div className="flex items-center justify-between gap-3 mb-2.5">
+            <span className="text-[10px] uppercase font-mono tracking-wider font-bold text-[#45421F]">
               Route Telemetry
             </span>
-            <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#FFF21A] text-[#171717] font-bold">
+            <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-[#FFF21A] text-[#111111] border border-[#111111] font-black">
               {selectedDelivery.id}
             </span>
           </div>
 
-          <div className="space-y-1.5 text-xs text-[#FFFFFF]">
+          <div className="space-y-1.5 text-xs text-[#111111] font-medium">
             <div className="flex items-start gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#FFF21A] mt-1 shrink-0" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFF21A] border border-[#111111] mt-1 shrink-0" />
               <span className="truncate">{selectedDelivery.pickup_location}</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#A65BFF] mt-1 shrink-0" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#A65BFF] border border-[#111111] mt-1 shrink-0" />
               <span className="truncate">{selectedDelivery.dropoff_location}</span>
             </div>
           </div>
 
           {isLoadingRoute ? (
-            <div className="mt-3 flex items-center gap-2 text-xs text-[#A3A3A3] font-mono animate-pulse">
-              <Navigation className="w-3.5 h-3.5 animate-spin" />
+            <div className="mt-3 flex items-center gap-2 text-xs text-[#111111] font-mono animate-pulse bg-[#FFF21A] p-2 rounded border border-[#111111]">
+              <Navigation className="w-3.5 h-3.5 animate-spin text-[#A65BFF]" />
               Calculating road navigation path...
             </div>
           ) : routeData ? (
-            <div className="mt-3 pt-3 border-t border-[#383838] grid grid-cols-2 gap-3">
-              <div>
-                <span className="text-[10px] text-[#A3A3A3] block font-mono">ROAD DISTANCE</span>
-                <span className="text-sm font-bold font-mono text-[#FFFFFF]">
+            <div className="mt-3 pt-3 border-t border-[#111111]/20 grid grid-cols-2 gap-3">
+              <div className="bg-[#FFF21A]/30 p-2 rounded border border-[#111111]/15">
+                <span className="text-[10px] text-[#45421F] block font-mono font-bold">ROAD DISTANCE</span>
+                <span className="text-base font-black font-mono text-[#111111]">
                   {routeData.distanceKm} km
                 </span>
               </div>
-              <div>
-                <span className="text-[10px] text-[#A3A3A3] block font-mono">ESTIMATED TIME</span>
-                <div className="flex items-center gap-1 text-sm font-bold font-mono text-[#FFF21A]">
-                  <Clock className="w-3.5 h-3.5" />
+              <div className="bg-[#FFF21A]/30 p-2 rounded border border-[#111111]/15">
+                <span className="text-[10px] text-[#45421F] block font-mono font-bold">ESTIMATED TIME</span>
+                <div className="flex items-center gap-1 text-base font-black font-mono text-[#111111]">
+                  <Clock className="w-3.5 h-3.5 text-[#A65BFF]" />
                   <span>{routeData.durationMinutes} min</span>
                 </div>
               </div>
-              <div className="col-span-2 flex items-center justify-between text-[10px] font-mono text-[#A3A3A3] bg-[#202020] px-2 py-1 rounded">
-                <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-[#A65BFF]" />
+              <div className="col-span-2 flex items-center justify-between text-[10px] font-mono text-[#111111] bg-[#111111] text-[#FFFFFF] px-2.5 py-1.5 rounded border border-[#111111]">
+                <span className="flex items-center gap-1.5 text-[#FFF21A] font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#A65BFF]" />
                   Source: {routeData.source}
                 </span>
-                <span>{routeData.isEstimate ? 'Simulated Street Grid' : 'Real Road Network'}</span>
+                <span className="text-[#FFFFFF]">
+                  {routeData.isEstimate ? 'Simulated Grid' : 'Real Road Network'}
+                </span>
               </div>
             </div>
           ) : (
-            <div className="mt-3 flex items-center gap-2 text-xs text-yellow-500 font-mono">
+            <div className="mt-3 flex items-center gap-2 text-xs text-[#8A4B00] font-mono bg-[#FFF21A] p-2 rounded border border-[#8A4B00]">
               <AlertCircle className="w-3.5 h-3.5" />
               Route calculation unavailable
             </div>
@@ -206,8 +208,8 @@ export const InteractiveRouteMap: React.FC<InteractiveRouteMapProps> = ({
 
       {/* Standby Help Pill when no delivery selected */}
       {!selectedDelivery && (
-        <div className="absolute bottom-4 left-4 z-10 bg-[#171717]/85 backdrop-blur-md border border-[#383838] px-3 py-1.5 rounded-full text-xs font-mono text-[#A3A3A3] flex items-center gap-2">
-          <Navigation className="w-3.5 h-3.5 text-[#FFF21A]" />
+        <div className="absolute bottom-4 left-4 z-10 bg-[#FFFFFF] text-[#111111] border-2 border-[#111111] px-3.5 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 shadow-[2px_2px_0px_#111111]">
+          <Navigation className="w-3.5 h-3.5 text-[#A65BFF]" />
           Select any delivery to plot street-level turn-by-turn route
         </div>
       )}

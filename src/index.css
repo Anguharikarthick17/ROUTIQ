@@ -2,11 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-yellow: #FFF21A;
+  --brand-black: #111111;
+  --brand-purple: #A65BFF;
+  --brand-white: #FFFFFF;
+
+  --text-primary: #111111;
+  --text-secondary: #45421F;
+
+  --surface-primary: #FFF21A;
+  --surface-card: #FFFFFF;
+  --surface-dark: #171717;
+
+  --border-primary: #111111;
+  --border-subtle: rgba(17, 17, 17, 0.18);
+
+  --status-success: #176B38;
+  --status-warning: #8A4B00;
+  --status-danger: #B42318;
+
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 18px;
+
+  --page-gutter: clamp(20px, 3vw, 48px);
+  --section-gap: 28px;
+}
+
 @layer base {
   body {
-    background-color: #171717;
-    color: #ffffff;
+    background-color: var(--brand-yellow);
+    color: var(--text-primary);
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100dvh;
   }
 
   /* Custom scrollbar for data tables and panels */
@@ -15,27 +44,28 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #171717;
+    background: #FFF21A;
   }
   ::-webkit-scrollbar-thumb {
-    background: #383838;
+    background: #111111;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #505050;
+    background: #A65BFF;
   }
 }
 
-/* Leaflet dark theme override */
+/* Leaflet map overrides */
 .leaflet-container {
   background-color: #171717 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
 }
 
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  background: #202020 !important;
-  color: #ffffff !important;
-  border: 1px solid #383838 !important;
+  background: #111111 !important;
+  color: #FFF21A !important;
+  border: 2px solid #FFF21A !important;
   border-radius: 8px !important;
   font-family: 'JetBrains Mono', monospace !important;
   font-size: 11px !important;
@@ -45,4 +75,5 @@
   background: transparent;
   border: none;
 }
+
 

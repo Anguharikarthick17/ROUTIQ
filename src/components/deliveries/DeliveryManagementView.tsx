@@ -108,25 +108,25 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
     switch (priority) {
       case 'urgent':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-red-950/80 text-red-400 border border-red-800">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-[#B42318] text-white border border-[#111111]">
             Urgent
           </span>
         );
       case 'high':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-yellow-950/80 text-[#FFF21A] border border-yellow-800">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-[#FFF21A] text-[#111111] border border-[#111111]">
             High
           </span>
         );
       case 'normal':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-950/80 text-blue-300 border border-blue-800">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase bg-[#FFFFFF] text-[#111111] border border-[#111111]">
             Normal
           </span>
         );
       case 'low':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-zinc-800 text-zinc-400 border border-zinc-700">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#EEEEEE] text-[#555555] border border-[#111111]">
             Low
           </span>
         );
@@ -137,56 +137,61 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
     switch (status) {
       case 'pending':
         return (
-          <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-amber-400">
-            <Clock className="w-3.5 h-3.5" /> Pending Dispatch
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-mono font-black bg-[#FFF21A] text-[#111111] border border-[#111111]">
+            <Clock className="w-3 h-3 text-[#8A4B00]" /> Pending Dispatch
           </span>
         );
       case 'assigned':
         return (
-          <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-[#FFF21A]">
-            <Truck className="w-3.5 h-3.5" /> Allocated
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-mono font-black bg-[#FFFFFF] text-[#111111] border border-[#111111]">
+            <Truck className="w-3 h-3 text-[#111111]" /> Allocated
           </span>
         );
       case 'in_transit':
         return (
-          <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-[#A65BFF] animate-pulse">
-            <Navigation className="w-3.5 h-3.5" /> In Transit
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-mono font-black bg-[#A65BFF] text-white border border-[#111111]">
+            <Navigation className="w-3 h-3" /> In Transit
           </span>
         );
       case 'delivered':
         return (
-          <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-400">
-            <CheckCircle2 className="w-3.5 h-3.5" /> Delivered
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-mono font-black bg-[#176B38] text-white border border-[#111111]">
+            <CheckCircle2 className="w-3 h-3" /> Delivered
           </span>
         );
       case 'cancelled':
         return (
-          <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-red-400">
-            <XCircle className="w-3.5 h-3.5" /> Cancelled
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[10px] font-mono font-black bg-[#B42318] text-white border border-[#111111]">
+            <XCircle className="w-3 h-3" /> Cancelled
           </span>
         );
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#383838]">
+      <div className="bg-[#FFFFFF] border-2 border-[#111111] p-6 rounded-xl shadow-[4px_4px_0px_#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-mono uppercase tracking-wider text-[#FFF21A] font-bold">
-            Fulfillment Queue
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded bg-[#FFF21A] text-[#111111] font-mono text-[10px] font-black uppercase tracking-wider border border-[#111111]">
+              Fulfillment Queue
+            </span>
+            <span className="text-xs font-mono font-bold text-[#45421F]">
+              Autonomous Order Lifecycle Engine
+            </span>
           </div>
-          <h1 className="text-3xl font-display font-bold text-[#FFFFFF] mt-1">
+          <h1 className="text-3xl md:text-4xl font-display font-black text-[#111111]">
             Deliveries & Dispatch Orders
           </h1>
-          <p className="text-xs text-[#A3A3A3] mt-1 font-mono">
+          <p className="text-xs text-[#45421F] mt-1 font-mono">
             {deliveries.length} orders tracked through authoritative state machine transitions.
           </p>
         </div>
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2.5 bg-[#FFF21A] hover:bg-[#fff447] text-[#171717] font-mono text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 transition-all self-start sm:self-auto"
+          className="px-4 py-2.5 bg-[#A65BFF] hover:bg-[#9247E6] text-white font-mono text-xs font-black uppercase tracking-wider rounded-lg border-2 border-[#111111] shadow-[3px_3px_0px_#111111] flex items-center gap-2 transition-all self-start sm:self-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>New Delivery Order</span>
@@ -194,25 +199,25 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#202020] p-4 rounded-xl border border-[#383838]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#FFFFFF] p-4 rounded-xl border-2 border-[#111111] shadow-[3px_3px_0px_#111111]">
         <div className="relative">
-          <Search className="w-4 h-4 text-[#A3A3A3] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#45421F] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search order ID, location, driver, vehicle..."
-            className="w-full bg-[#171717] border border-[#383838] rounded-lg pl-9 pr-4 py-2 text-xs text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A] font-mono"
+            className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg pl-9 pr-4 py-2 text-xs text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A] font-mono shadow-[2px_2px_0px_#111111]"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-[#A3A3A3]" />
-          <span className="text-xs font-mono text-[#A3A3A3]">Status:</span>
+          <Filter className="w-4 h-4 text-[#111111]" />
+          <span className="text-xs font-mono font-black text-[#111111]">Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex-1 bg-[#171717] border border-[#383838] rounded-lg px-3 py-2 text-xs font-mono text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+            className="flex-1 bg-[#FFFFFF] border-2 border-[#111111] rounded-lg px-3 py-2 text-xs font-mono font-black text-[#111111] focus:outline-none focus:bg-[#FFF21A] shadow-[2px_2px_0px_#111111] cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="pending">Pending</option>
@@ -224,11 +229,11 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-[#A3A3A3]">Priority:</span>
+          <span className="text-xs font-mono font-black text-[#111111]">Priority:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="flex-1 bg-[#171717] border border-[#383838] rounded-lg px-3 py-2 text-xs font-mono text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+            className="flex-1 bg-[#FFFFFF] border-2 border-[#111111] rounded-lg px-3 py-2 text-xs font-mono font-black text-[#111111] focus:outline-none focus:bg-[#FFF21A] shadow-[2px_2px_0px_#111111] cursor-pointer"
           >
             <option value="ALL">All Priorities</option>
             <option value="urgent">Urgent</option>
@@ -240,10 +245,10 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
       </div>
 
       {/* Deliveries Table */}
-      <div className="bg-[#202020] border border-[#383838] rounded-xl overflow-hidden shadow-2xl">
+      <div className="bg-[#FFFFFF] border-2 border-[#111111] rounded-xl overflow-hidden shadow-[4px_4px_0px_#111111]">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-[#171717] text-[#A3A3A3] uppercase text-[10px] tracking-wider border-b border-[#383838]">
+            <thead className="bg-[#111111] text-[#FFFFFF] uppercase text-[10px] tracking-wider border-b-2 border-[#111111]">
               <tr>
                 <th className="py-3 px-4">Order ID</th>
                 <th className="py-3 px-4">Priority</th>
@@ -254,50 +259,50 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                 <th className="py-3 px-4 text-right">Lifecycle Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#383838]">
+            <tbody className="divide-y divide-[#111111]/15">
               {filteredDeliveries.map((delivery) => {
                 const assignedVehicle = vehicles.find((v) => v.id === delivery.assigned_vehicle_id);
                 const assignedDriver = drivers.find((d) => d.id === delivery.assigned_driver_id);
 
                 return (
-                  <tr key={delivery.id} className="hover:bg-[#252525] transition-colors">
+                  <tr key={delivery.id} className="hover:bg-[#FFF21A]/20 transition-colors">
                     <td className="py-3 px-4">
-                      <div className="font-bold text-[#FFF21A]">{delivery.id}</div>
-                      <div className="text-[10px] text-[#A3A3A3]">
+                      <div className="font-black text-[#111111]">{delivery.id}</div>
+                      <div className="text-[10px] text-[#45421F] font-bold">
                         {formatRelativeTime(delivery.scheduled_time)}
                       </div>
                     </td>
                     <td className="py-3 px-4">{getPriorityBadge(delivery.priority)}</td>
                     <td className="py-3 px-4 max-w-xs">
-                      <div className="truncate font-semibold text-[#FFFFFF]">
+                      <div className="truncate font-black text-[#111111]">
                         {delivery.pickup_location}
                       </div>
-                      <div className="text-[#A3A3A3] truncate text-[11px] flex items-center gap-1">
+                      <div className="text-[#45421F] font-medium truncate text-[11px] flex items-center gap-1">
                         <ArrowRight className="w-3 h-3 text-[#A65BFF] shrink-0" />
                         <span>{delivery.dropoff_location}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="font-bold text-[#FFFFFF]">
+                      <div className="font-black text-[#111111]">
                         {formatWeight(delivery.required_capacity)}
                       </div>
-                      <div className="text-[10px] text-[#A3A3A3]">
+                      <div className="text-[10px] text-[#45421F] font-bold">
                         {delivery.required_vehicle_type
                           ? vehicleTypeLabel(delivery.required_vehicle_type)
                           : 'Any Type'}
                       </div>
                     </td>
                     <td className="py-3 px-4">{getStatusBadge(delivery.status)}</td>
-                    <td className="py-3 px-4 text-[#A3A3A3]">
+                    <td className="py-3 px-4 text-[#45421F]">
                       {assignedVehicle && assignedDriver ? (
                         <div className="space-y-0.5">
-                          <div className="text-[#FFFFFF] font-bold">
+                          <div className="text-[#111111] font-black">
                             {assignedVehicle.id} ({assignedVehicle.registration_number})
                           </div>
-                          <div className="text-[10px] text-[#A65BFF]">{assignedDriver.name}</div>
+                          <div className="text-[10px] text-[#A65BFF] font-bold">{assignedDriver.name}</div>
                         </div>
                       ) : (
-                        <span className="text-[#71717A] italic">Unassigned</span>
+                        <span className="text-[#888888] italic font-bold">Unassigned</span>
                       )}
                     </td>
                     <td className="py-3 px-4 text-right whitespace-nowrap space-x-1.5">
@@ -305,10 +310,10 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                       {onPlotRouteOnMap && (
                         <button
                           onClick={() => onPlotRouteOnMap(delivery)}
-                          className="p-1.5 rounded bg-[#171717] hover:bg-[#383838] border border-[#383838] text-[#A3A3A3] hover:text-[#FFF21A] transition-colors"
+                          className="p-1.5 rounded bg-[#FFFFFF] hover:bg-[#FFF21A] border border-[#111111] text-[#111111] transition-colors shadow-[1px_1px_0px_#111111]"
                           title="Plot road route on map"
                         >
-                          <MapPin className="w-3.5 h-3.5" />
+                          <MapPin className="w-3.5 h-3.5 text-[#111111]" />
                         </button>
                       )}
 
@@ -318,7 +323,7 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                           {onOpenDecisionLab && (
                             <button
                               onClick={() => onOpenDecisionLab(delivery.id)}
-                              className="px-2 py-1 rounded bg-[#A65BFF]/20 hover:bg-[#A65BFF]/30 text-[#A65BFF] border border-[#A65BFF]/40 text-xs font-bold font-mono"
+                              className="px-2.5 py-1 rounded-lg bg-[#A65BFF] hover:bg-[#9247E6] text-white border border-[#111111] text-xs font-black font-mono shadow-[2px_2px_0px_#111111]"
                               title="Inspect full candidate matrix in Decision Lab"
                             >
                               Decision Lab
@@ -326,13 +331,13 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                           )}
                           <button
                             onClick={() => setDispatchTargetDelivery(delivery)}
-                            className="px-2.5 py-1 rounded bg-[#FFF21A] hover:bg-[#fff447] text-[#171717] font-bold text-xs uppercase"
+                            className="px-2.5 py-1 rounded-lg bg-[#FFF21A] hover:bg-[#fff447] text-[#111111] font-black text-xs uppercase border border-[#111111] shadow-[2px_2px_0px_#111111]"
                           >
                             Quick Assign
                           </button>
                           <button
                             onClick={() => cancelDelivery(delivery.id, 'Cancelled from queue')}
-                            className="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-300 text-xs"
+                            className="px-2 py-1 rounded bg-[#FFFFFF] hover:bg-[#B42318]/10 border border-[#B42318] text-[#B42318] text-xs font-bold"
                           >
                             Cancel
                           </button>
@@ -343,13 +348,13 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                         <>
                           <button
                             onClick={() => updateDeliveryStatus(delivery.id, 'in_transit')}
-                            className="px-2.5 py-1 rounded bg-[#A65BFF] hover:bg-[#A65BFF]/90 text-white font-bold text-xs"
+                            className="px-3 py-1 rounded-lg bg-[#A65BFF] hover:bg-[#9247E6] text-white font-black text-xs border border-[#111111] shadow-[2px_2px_0px_#111111]"
                           >
                             Start Transit
                           </button>
                           <button
                             onClick={() => cancelDelivery(delivery.id, 'Cancelled during assignment')}
-                            className="px-2 py-1 rounded bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-300 text-xs"
+                            className="px-2 py-1 rounded bg-[#FFFFFF] hover:bg-[#B42318]/10 border border-[#B42318] text-[#B42318] text-xs font-bold"
                           >
                             Cancel
                           </button>
@@ -359,15 +364,15 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                       {delivery.status === 'in_transit' && (
                         <button
                           onClick={() => completeDelivery(delivery.id)}
-                          className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 inline-flex"
+                          className="px-3 py-1 rounded-lg bg-[#176B38] hover:bg-[#12582D] text-white font-black text-xs flex items-center gap-1 inline-flex border border-[#111111] shadow-[2px_2px_0px_#111111]"
                         >
-                          <CheckCircle2 className="w-3 h-3" />
-                          <span>Delivered</span>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Mark Delivered</span>
                         </button>
                       )}
 
                       {(delivery.status === 'delivered' || delivery.status === 'cancelled') && (
-                        <span className="text-[10px] text-[#71717A] uppercase font-mono">
+                        <span className="text-[10px] text-[#888888] uppercase font-mono font-bold">
                           Completed / Finalized
                         </span>
                       )}
@@ -393,22 +398,22 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
 
       {/* Add Delivery Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#171717] border border-[#383838] w-full max-w-lg rounded-xl p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#FFFFFF] border-3 border-[#111111] w-full max-w-lg rounded-xl p-6 shadow-[8px_8px_0px_#111111] relative text-[#111111]">
             <button
               onClick={() => setIsAddModalOpen(false)}
-              className="absolute top-4 right-4 text-[#A3A3A3] hover:text-[#FFFFFF]"
+              className="absolute top-4 right-4 p-1.5 rounded-lg border border-[#111111] hover:bg-[#FFF21A] text-[#111111]"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-bold font-display text-[#FFFFFF] mb-4">
+            <h3 className="text-xl font-black font-display text-[#111111] mb-4">
               Create New Delivery Order
             </h3>
 
             {formError && (
-              <div className="p-3 bg-red-950/40 border border-red-800 text-red-200 text-xs rounded mb-4 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
+              <div className="p-3 bg-[#B42318]/10 border-2 border-[#B42318] text-[#B42318] text-xs font-mono font-bold rounded-lg mb-4 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-[#B42318] shrink-0" />
                 <span>{formError}</span>
               </div>
             )}
@@ -416,22 +421,22 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
             <form onSubmit={handleCreateDelivery} className="space-y-4 text-xs font-mono">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[#A3A3A3] block mb-1">ORDER ID (e.g. DEL-207)</label>
+                  <label className="text-[#45421F] font-black block mb-1">ORDER ID (e.g. DEL-207)</label>
                   <input
                     type="text"
                     required
                     value={newId}
                     onChange={(e) => setNewId(e.target.value)}
                     placeholder="DEL-207"
-                    className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                    className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A]"
                   />
                 </div>
                 <div>
-                  <label className="text-[#A3A3A3] block mb-1">PRIORITY</label>
+                  <label className="text-[#45421F] font-black block mb-1">PRIORITY</label>
                   <select
                     value={newPriority}
                     onChange={(e) => setNewPriority(e.target.value as DeliveryPriority)}
-                    className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                    className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A] cursor-pointer"
                   >
                     <option value="urgent">Urgent</option>
                     <option value="high">High</option>
@@ -442,47 +447,47 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
               </div>
 
               <div>
-                <label className="text-[#A3A3A3] block mb-1">PICKUP LOCATION</label>
+                <label className="text-[#45421F] font-black block mb-1">PICKUP LOCATION</label>
                 <input
                   type="text"
                   required
                   value={newPickup}
                   onChange={(e) => setNewPickup(e.target.value)}
                   placeholder="e.g. 500 Howard St, San Francisco, CA"
-                  className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                  className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A]"
                 />
               </div>
 
               <div>
-                <label className="text-[#A3A3A3] block mb-1">DROPOFF LOCATION</label>
+                <label className="text-[#45421F] font-black block mb-1">DROPOFF LOCATION</label>
                 <input
                   type="text"
                   required
                   value={newDropoff}
                   onChange={(e) => setNewDropoff(e.target.value)}
                   placeholder="e.g. 1000 Sansome St, San Francisco, CA"
-                  className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                  className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[#A3A3A3] block mb-1">REQUIRED PAYLOAD (kg)</label>
+                  <label className="text-[#45421F] font-black block mb-1">REQUIRED PAYLOAD (kg)</label>
                   <input
                     type="number"
                     min="1"
                     required
                     value={newCapacity}
                     onChange={(e) => setNewCapacity(Number(e.target.value))}
-                    className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                    className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A]"
                   />
                 </div>
                 <div>
-                  <label className="text-[#A3A3A3] block mb-1">VEHICLE REQUIREMENT</label>
+                  <label className="text-[#45421F] font-black block mb-1">VEHICLE REQUIREMENT</label>
                   <select
                     value={newVehicleType}
                     onChange={(e) => setNewVehicleType(e.target.value as VehicleType)}
-                    className="w-full bg-[#202020] border border-[#383838] rounded p-2.5 text-[#FFFFFF] focus:outline-none focus:border-[#FFF21A]"
+                    className="w-full bg-[#FFFFFF] border-2 border-[#111111] rounded-lg p-2.5 text-[#111111] font-bold focus:outline-none focus:bg-[#FFF21A] cursor-pointer"
                   >
                     <option value="">Any Compatible Class</option>
                     <option value="electric_van">Electric Van</option>
@@ -494,17 +499,17 @@ export const DeliveryManagementView: React.FC<DeliveryManagementViewProps> = ({
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-3 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 bg-[#202020] text-[#A3A3A3] hover:text-[#FFFFFF] rounded"
+                  className="px-4 py-2 bg-[#FFFFFF] border-2 border-[#111111] text-[#111111] font-bold rounded-lg hover:bg-[#EEEEEE]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#FFF21A] text-[#171717] font-bold rounded hover:bg-[#fff447]"
+                  className="px-5 py-2 bg-[#A65BFF] hover:bg-[#9247E6] text-white font-black rounded-lg border-2 border-[#111111] shadow-[2px_2px_0px_#111111]"
                 >
                   Create Delivery
                 </button>

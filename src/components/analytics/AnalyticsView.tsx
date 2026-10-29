@@ -84,24 +84,24 @@ export const AnalyticsView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header with Export */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#383838]">
+      <div className="bg-[#FFFFFF] p-6 rounded-xl border-2 border-[#111111] shadow-[4px_4px_0px_#111111] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-mono uppercase tracking-wider text-[#FFF21A] font-bold">
-            Data & Telemetry Engine
+          <div className="text-xs font-mono uppercase tracking-wider text-[#A65BFF] font-black">
+            DATA & TELEMETRY ENGINE
           </div>
-          <h1 className="text-3xl font-display font-bold text-[#FFFFFF] mt-1">
-            Operational Intelligence & Analytics
+          <h1 className="text-2xl sm:text-3xl font-display font-black text-[#111111] mt-1 tracking-tight">
+            OPERATIONAL INTELLIGENCE & ANALYTICS
           </h1>
-          <p className="text-xs text-[#A3A3A3] mt-1 font-mono">
+          <p className="text-xs text-[#45421F] mt-1 font-bold">
             Derived strictly from persisted operational records and transactional database state.
           </p>
         </div>
 
         <button
           onClick={handleExportCSV}
-          className="px-4 py-2.5 bg-[#202020] hover:bg-[#282828] border border-[#383838] text-xs font-mono font-bold uppercase rounded flex items-center gap-2 text-[#FFFFFF] transition-colors self-start sm:self-auto"
+          className="px-5 py-3 bg-[#111111] hover:bg-[#282828] text-white text-xs font-mono font-black uppercase rounded-lg flex items-center gap-2 border-2 border-[#111111] shadow-[3px_3px_0px_#45421F] transition-transform active:translate-x-0.5 active:translate-y-0.5 self-start sm:self-auto"
         >
           <Download className="w-4 h-4 text-[#FFF21A]" />
           <span>Export Deliveries CSV</span>
@@ -110,19 +110,19 @@ export const AnalyticsView: React.FC = () => {
 
       {/* KPI Definition Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-xl bg-[#202020] border border-[#383838] relative overflow-hidden">
+        <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111] relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#A3A3A3]">
-              Fleet Utilization
+            <span className="text-xs font-mono font-black uppercase tracking-wider text-[#45421F]">
+              FLEET UTILIZATION
             </span>
-            <span className="p-2 rounded bg-[#FFF21A]/10 text-[#FFF21A]">
+            <span className="p-2.5 rounded-lg bg-[#FFF21A] text-[#111111] border-2 border-[#111111] shadow-[2px_2px_0px_#111111]">
               <BarChart2 className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-4xl font-display font-bold text-[#FFF21A]">
+          <div className="text-4xl font-display font-black text-[#111111]">
             {metrics.fleetUtilizationPct}%
           </div>
-          <div className="mt-4 pt-3 border-t border-[#383838] text-[11px] font-mono text-[#A3A3A3] flex items-center gap-1.5">
+          <div className="mt-4 pt-3 border-t-2 border-[#111111]/10 text-[11px] font-mono text-[#45421F] font-bold flex items-center gap-1.5">
             <Info className="w-3.5 h-3.5 text-[#A65BFF] shrink-0" />
             <span>
               Formula: ({metrics.assignedVehicles} Assigned ÷{' '}
@@ -131,42 +131,42 @@ export const AnalyticsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-6 rounded-xl bg-[#202020] border border-[#383838] relative overflow-hidden">
+        <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111] relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#A3A3A3]">
-              Fulfillment Rate
+            <span className="text-xs font-mono font-black uppercase tracking-wider text-[#45421F]">
+              FULFILLMENT RATE
             </span>
-            <span className="p-2 rounded bg-emerald-500/10 text-emerald-400">
+            <span className="p-2.5 rounded-lg bg-[#176B38] text-white border-2 border-[#111111] shadow-[2px_2px_0px_#111111]">
               <CheckCircle className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-4xl font-display font-bold text-emerald-400">
+          <div className="text-4xl font-display font-black text-[#176B38]">
             {metrics.completionRatePct}%
           </div>
-          <div className="mt-4 pt-3 border-t border-[#383838] text-[11px] font-mono text-[#A3A3A3] flex items-center gap-1.5">
-            <Info className="w-3.5 h-3.5 text-[#A65BFF] shrink-0" />
+          <div className="mt-4 pt-3 border-t-2 border-[#111111]/10 text-[11px] font-mono text-[#45421F] font-bold flex items-center gap-1.5">
+            <Info className="w-3.5 h-3.5 text-[#176B38] shrink-0" />
             <span>
               Formula: ({metrics.completedDeliveries} Delivered ÷ {deliveries.length} Total Deliveries) × 100
             </span>
           </div>
         </div>
 
-        <div className="p-6 rounded-xl bg-[#202020] border border-[#383838] relative overflow-hidden">
+        <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111] relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#A3A3A3]">
-              Active Driver Allocation
+            <span className="text-xs font-mono font-black uppercase tracking-wider text-[#45421F]">
+              ACTIVE DRIVER ALLOCATION
             </span>
-            <span className="p-2 rounded bg-[#A65BFF]/10 text-[#A65BFF]">
+            <span className="p-2.5 rounded-lg bg-[#A65BFF] text-white border-2 border-[#111111] shadow-[2px_2px_0px_#111111]">
               <Clock className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-4xl font-display font-bold text-[#A65BFF]">
+          <div className="text-4xl font-display font-black text-[#A65BFF]">
             {drivers.length > 0
               ? Math.round((metrics.assignedDrivers / drivers.length) * 100)
               : 0}
             %
           </div>
-          <div className="mt-4 pt-3 border-t border-[#383838] text-[11px] font-mono text-[#A3A3A3] flex items-center gap-1.5">
+          <div className="mt-4 pt-3 border-t-2 border-[#111111]/10 text-[11px] font-mono text-[#45421F] font-bold flex items-center gap-1.5">
             <Info className="w-3.5 h-3.5 text-[#A65BFF] shrink-0" />
             <span>
               {metrics.assignedDrivers} on active routes • {metrics.availableDrivers} on standby • {metrics.unavailableDrivers} unavailable
@@ -176,11 +176,11 @@ export const AnalyticsView: React.FC = () => {
       </div>
 
       {/* Visual Analytics Graphs */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
-        <div className="p-6 rounded-xl bg-[#202020] border border-[#383838]">
-          <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-[#FFFFFF] mb-4">
-            Delivery Lifecycle Distribution
+        <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111]">
+          <h3 className="text-sm font-black font-mono uppercase tracking-wider text-[#111111] mb-4">
+            DELIVERY LIFECYCLE DISTRIBUTION
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -195,53 +195,57 @@ export const AnalyticsView: React.FC = () => {
                   dataKey="count"
                 >
                   {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color} stroke="#111111" strokeWidth={2} />
                   ))}
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#171717',
-                    borderColor: '#383838',
+                    backgroundColor: '#111111',
+                    borderColor: '#111111',
                     borderRadius: '8px',
                     fontSize: '12px',
                     fontFamily: 'monospace',
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
                   }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 border-t border-[#383838] text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 border-t-2 border-[#111111]/10 text-xs font-mono">
             {statusData.map((item) => (
               <div key={item.name} className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-[#A3A3A3]">{item.name}:</span>
-                <span className="font-bold text-[#FFFFFF]">{item.count}</span>
+                <span className="w-3 h-3 rounded-full border border-[#111111]" style={{ backgroundColor: item.color }} />
+                <span className="text-[#45421F] font-bold">{item.name}:</span>
+                <span className="font-black text-[#111111]">{item.count}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Priority Breakdown */}
-        <div className="p-6 rounded-xl bg-[#202020] border border-[#383838]">
-          <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-[#FFFFFF] mb-4">
-            Order Priority Spectrum
+        <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111]">
+          <h3 className="text-sm font-black font-mono uppercase tracking-wider text-[#111111] mb-4">
+            ORDER PRIORITY SPECTRUM
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={priorityData}>
-                <XAxis dataKey="priority" stroke="#A3A3A3" fontSize={11} fontFamily="monospace" />
-                <YAxis stroke="#A3A3A3" fontSize={11} fontFamily="monospace" allowDecimals={false} />
+                <XAxis dataKey="priority" stroke="#111111" fontSize={11} fontFamily="monospace" fontWeight="bold" />
+                <YAxis stroke="#111111" fontSize={11} fontFamily="monospace" fontWeight="bold" allowDecimals={false} />
                 <Tooltip
-                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  cursor={{ fill: 'rgba(255, 242, 26, 0.25)' }}
                   contentStyle={{
-                    backgroundColor: '#171717',
-                    borderColor: '#383838',
+                    backgroundColor: '#111111',
+                    borderColor: '#111111',
                     borderRadius: '8px',
                     fontSize: '12px',
                     fontFamily: 'monospace',
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
                   }}
                 />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="count" radius={[6, 6, 0, 0]} stroke="#111111" strokeWidth={2}>
                   {priorityData.map((entry, index) => (
                     <Cell key={`bar-${index}`} fill={entry.fill} />
                   ))}
@@ -249,25 +253,25 @@ export const AnalyticsView: React.FC = () => {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="pt-4 border-t border-[#383838] text-xs font-mono text-[#A3A3A3]">
-            Urgent and High priority orders receive automatic dispatch recommendation weights.
+          <div className="pt-4 border-t-2 border-[#111111]/10 text-xs font-mono font-bold text-[#45421F]">
+            Urgent and High priority orders receive automatic dispatch recommendation weights in Decision Lab.
           </div>
         </div>
       </div>
 
       {/* Fleet Mix Breakdown */}
-      <div className="p-6 rounded-xl bg-[#202020] border border-[#383838]">
-        <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-[#FFFFFF] mb-4">
-          Fleet Composition by Asset Classification
+      <div className="p-6 rounded-xl bg-[#FFFFFF] border-2 border-[#111111] shadow-[4px_4px_0px_#111111]">
+        <h3 className="text-sm font-black font-mono uppercase tracking-wider text-[#111111] mb-4">
+          FLEET COMPOSITION BY ASSET CLASSIFICATION
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {vehicleTypeData.map((vt) => (
-            <div key={vt.type} className="p-4 rounded-lg bg-[#171717] border border-[#383838]">
-              <span className="text-[10px] font-mono text-[#A3A3A3] block truncate">{vt.type}</span>
-              <span className="text-2xl font-bold font-mono text-[#FFF21A] mt-1 block">
+            <div key={vt.type} className="p-4 rounded-xl bg-[#FFF21A]/20 border-2 border-[#111111] shadow-[2px_2px_0px_#111111]">
+              <span className="text-[10px] font-mono text-[#45421F] font-black block truncate">{vt.type}</span>
+              <span className="text-2xl font-black font-mono text-[#111111] mt-1 block">
                 {vt.count}
               </span>
-              <span className="text-[10px] font-mono text-[#A3A3A3]">
+              <span className="text-[10px] font-mono text-[#45421F] font-bold">
                 {Math.round((vt.count / vehicles.length) * 100)}% of total fleet
               </span>
             </div>
